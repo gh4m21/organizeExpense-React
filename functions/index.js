@@ -1,41 +1,53 @@
 const functions = require('firebase-functions');
 const app = require('express')();
+const auth = require('./util/auth');
 
-const { getAllExpenses, addExpense, deleteExpense, editExpense } = require('./APIs/expenses');
-const { getAllIncomes, addIncome, deleteIncome, editIncome } = require('./APIs/incomes');
+const { getAllExpenses, getOneExpense, addExpense, deleteExpense, editExpense } = require('./APIs/expenses');
+const { getAllIncomes, getOneIncome, addIncome, deleteIncome, editIncome } = require('./APIs/incomes');
 const { getAllCategoryExpenses, addCategoryExpense, deleteCategoryExpense, editCategoryExpense } = require('./APIs/categoryExpenses');
 const { getAllCategoryIncomes, addCategoryIncome, deleteCategoryIncome, editCategoryIncome } = require('./APIs/categoryIncomes');
 const { getAllCurrency, addCurrency, deleteCurrency, editCurrency } = require('./APIs/currencies');
+const { loginUser, signUpUser, uploadProfilePhoto, getUserDetail, updateUserDetails } = require('./APIs/users');
 
 //Routes API
 //Expenses
-app.get('/getAllExpenses', getAllExpenses);
-app.post('/addExpense', addExpense);
-app.delete('/deleteExpense/:expenseId', deleteExpense);
-app.put('/editExpense/:expenseId', editExpense);
+app.get('/expense', auth, getAllExpenses);
+app.get('/expense/:expenseId', auth, getOneExpense);
+app.post('/expense', auth, addExpense);
+app.delete('/expense/:expenseId', auth, deleteExpense);
+app.put('/expense/:expenseId', auth, editExpense);
 
 //Incomes
-app.get('/getAllIncomes', getAllIncomes);
-app.post('/addIncome', addIncome);
-app.delete('/deleteIncome/:incomeId', deleteIncome);
-app.put('/editIncome/:incomeId', editIncome);
+app.get('/income', auth, getAllIncomes);
+app.get('/income/:incomeId', auth, getOneIncome);
+app.post('/income', auth, addIncome);
+app.delete('/income/:incomeId', auth, deleteIncome);
+app.put('/income/:incomeId', auth, editIncome);
 
 //categoryExpenses
-app.get('/getAllCategoryExpenses', getAllCategoryExpenses);
-app.post('/addCategoryExpense', addCategoryExpense);
-app.delete('/deleteCategoryExpense/:categoryExpenseId', deleteCategoryExpense);
-app.put('/editCategoryExpense/:categoryExpenseId', editCategoryExpense);
+app.get('/categoryexpenses', getAllCategoryExpenses);
+app.post('/categoryexpense', addCategoryExpense);
+app.delete('/categoryexpense/:categoryExpenseId', deleteCategoryExpense);
+app.put('/categoryexpense/:categoryExpenseId', editCategoryExpense);
 
 //categoryIncomes
-app.get('/getAllCategoryIncomes', getAllCategoryIncomes);
-app.post('/addCategoryIncome', addCategoryIncome);
-app.delete('/deleteCategoryIncome/:categoryIncomeId', deleteCategoryIncome);
-app.put('/editCategoryIncome/:categoryIncomeId', editCategoryIncome);
+app.get('/categoryincome', getAllCategoryIncomes);
+app.post('/categoryincome', addCategoryIncome);
+app.delete('/categoryincome/:categoryIncomeId', deleteCategoryIncome);
+app.put('/categoryincome/:categoryIncomeId', editCategoryIncome);
 
 //Currency
-app.get('/getAllCurrency', getAllCurrency);
-app.post('/addCurrency', addCurrency);
-app.delete('/deleteCurrency/:currencyId', deleteCurrency);
-app.put('/editCurrency/:currencyId', editCurrency);
+app.get('/currency', getAllCurrency);
+app.post('/currency', addCurrency);
+app.delete('/currency/:currencyId', deleteCurrency);
+app.put('/currency/:currencyId', editCurrency);
+
+//Users
+app.post('/login', loginUser);
+app.post('/signup', signUpUser);
+app.post('/user/image', auth, uploadProfilePhoto);
+app.get('/user', auth, getUserDetail);
+app.post('/user', auth, updateUserDetails);
+
 
 exports.api = functions.https.onRequest(app);

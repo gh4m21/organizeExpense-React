@@ -1,7 +1,8 @@
 const { db } = require("../util/admin");
 
 exports.getAllExpenses = (request, response) => {
-  db.collection("expenses")
+  db.collection('expenses')
+    .where('username', '==', request.user.username)
     .orderBy("date", "desc")
     .get()
     .then((data) => {
@@ -24,6 +25,28 @@ exports.getAllExpenses = (request, response) => {
     });
 };
 
+exports.getOneExpense = (request, response) => {
+  db.doc(`/expenses/${request.params.expenseId}`)
+    .get()
+    .then((doc) => {
+      if (!doc.exists) {
+        return response.status(404).json({ error: 'Expense not found' });
+      }
+
+      if (doc.data().username !== request.user.username) {
+        return response.status(403).json({ error: 'Unauthorized' });
+      }
+
+      expenseData = doc.data();
+      expenseData.expenseId = doc.id;
+      return response.json(expenseData);
+    })
+    .catch((err) => {
+      console.log(err);
+      return response.status(500).json({ error: err.code });
+    });
+}
+
 exports.addExpense = (request, response) => {
   if (request.body.description.trim() === '') {
     return response.status(400).json({ description: "Must not be empty" });
@@ -34,6 +57,7 @@ exports.addExpense = (request, response) => {
   }
 
   const newExpenseItem = {
+    username: request.user.username,
     description: request.body.description,
     category: request.body.category,
     amount: request.body.amount,
@@ -62,6 +86,10 @@ exports.deleteExpense = (request, response) => {
     .then((doc) => {
       if (!doc.exists) {
         return response.status(404).json({ error: 'Expense not found' });
+      }
+
+      if (doc.data().username !== request.user.username) {
+        return response.status(403).json({ error: 'Unauthorized' });
       }
 
       return document.delete();
