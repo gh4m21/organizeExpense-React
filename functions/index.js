@@ -2,12 +2,12 @@ const functions = require('firebase-functions');
 const app = require('express')();
 const auth = require('./util/auth');
 
-const { getAllExpenses, getOneExpense, addExpense, deleteExpense, editExpense } = require('./APIs/expenses');
-const { getAllIncomes, getOneIncome, addIncome, deleteIncome, editIncome } = require('./APIs/incomes');
-const { getAllCategoryExpenses, addCategoryExpense, deleteCategoryExpense, editCategoryExpense } = require('./APIs/categoryExpenses');
-const { getAllCategoryIncomes, addCategoryIncome, deleteCategoryIncome, editCategoryIncome } = require('./APIs/categoryIncomes');
-const { getAllCurrency, addCurrency, deleteCurrency, editCurrency } = require('./APIs/currencies');
-const { loginUser, signUpUser, uploadProfilePhoto, getUserDetail, updateUserDetails } = require('./APIs/users');
+const { getAllExpenses, getOneExpense, addExpense, deleteExpense, editExpense } = require('./API/expenses');
+const { getAllIncomes, getOneIncome, addIncome, deleteIncome, editIncome } = require('./API/incomes');
+const { getAllCategoryExpenses, addCategoryExpense, deleteCategoryExpense, editCategoryExpense } = require('./API/categoryExpenses');
+const { getAllCategoryIncomes, addCategoryIncome, deleteCategoryIncome, editCategoryIncome } = require('./API/categoryIncomes');
+const { getAllCurrency, addCurrency, deleteCurrency, editCurrency } = require('./API/currencies');
+const { loginUser, signUpUser, uploadProfilePhoto, getUserDetail, updateUserDetails } = require('./API/users');
 
 //Routes API
 //Expenses
