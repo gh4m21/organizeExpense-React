@@ -1,10 +1,9 @@
-import React, { Component } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import { getUser } from '../redux/actions/user';
+import PropTypes from 'prop-types';
 
-import Dashboard from '../components/Dashboard';
-import Account from '../components/Account';
-import Expense from '../components/Expense';
-import Income from '../components/Income';
+import Menu from '../components/Menu';
 
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
@@ -16,6 +15,7 @@ import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import { makeStyles } from '@material-ui/core/styles';
 import withStyles from '@material-ui/core/styles/withStyles';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import DashboardIcon from '@material-ui/icons/Dashboard';
@@ -29,7 +29,7 @@ import { authMiddleWare } from '../util/auth'
 
 const drawerWidth = 240;
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex'
     },
@@ -63,191 +63,162 @@ const styles = (theme) => ({
         top: '35%'
     },
     toolbar: theme.mixins.toolbar
-});
+}));
 
-class home extends Component {
-    state = {
-        render: false,
-        componentClick: ''
-    };
 
-    loadDashboardPage = (event) => {
-        this.setState({
-            render: true,
-            componentClick: 'Dashboard'
+const Home = (props) => {
+
+    const { history, getUser, user, uiLoading, error } = props;
+
+    const classes = useStyles();
+
+    const [componentClick, setComponentClick] = useState('');
+    const [userDetails, setUserDetails] = useState({
+        firstName: '',
+        lastName: '',
+        country: '',
+        phoneNumber: '',
+        profilePicture: '',
+        uiLoading: true,
+        imageLoading: false
+    });
+
+    useEffect(() => {
+        getUser(history);
+        setUserDetails({
+            firstName: user.firstName,
+            lastName: user.lastName,
+            phoneNumber: user.phoneNumber,
+            country: user.country,
+            uiLoading: false,
+            profilePicture: user.imageUrl
         });
+    }, []);
+
+
+    const loadDashboardPage = (event) => {
+        setComponentClick('Dashboard');
     };
 
-    loadAccountPage = (event) => {
-        this.setState({
-            render: true,
-            componentClick: 'Account'
-        });
+    const loadAccountPage = (event) => {
+        setComponentClick('Account');
     };
 
-    loadExpensePage = (event) => {
-        this.setState({
-            render: false,
-            componentClick: 'Expense'
-        });
+    const loadExpensePage = (event) => {
+        setComponentClick('Expense');
     };
 
-    loadIncomePage = (event) => {
-        this.setState({
-            render: false,
-            componentClick: 'Income'
-        });
+    const loadIncomePage = (event) => {
+        setComponentClick('Income');
     };
 
-    logoutHandler = (event) => {
+    const logoutHandler = (event) => {
         localStorage.removeItem('AuthToken');
-        this.props.history.push('/login');
+        history.push('/login');
     };
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            firstName: '',
-            lastName: '',
-            profilePicture: '',
-            uiLoading: true,
-            imageLoading: false
-        };
-    }
-
-    componentWillMount = () => {
-        authMiddleWare(this.props.history);
-        const authToken = localStorage.getItem('AuthToken');
-        axios.defaults.headers.common = { Authorization: `${authToken}` };
-        axios
-            .get('/user')
-            .then((response) => {
-                console.log(response.data);
-                this.setState({
-                    firstName: response.data.userCredentials.firstName,
-                    lastName: response.data.userCredentials.lastName,
-                    email: response.data.userCredentials.email,
-                    phoneNumber: response.data.userCredentials.phoneNumber,
-                    country: response.data.userCredentials.country,
-                    username: response.data.userCredentials.username,
-                    uiLoading: false,
-                    profilePicture: response.data.userCredentials.imageUrl
-                });
-            })
-            .catch((error) => {
-                if (error.response.status === 403) {
-                    this.props.history.push('/login')
-                }
-                console.log(error);
-                this.setState({ errorMsg: 'Error in retrieving the data' });
-            });
-    };
-
-    // function to handle function change Component 
-    componentClickRender = (props) => {
-        if (props.componentClick === '') {
-            return <Dashboard />;
-        } else if (props.componentClick === 'Dashboard') {
-            return <Dashboard />;
-        } else if (props.componentClick === 'Expense') {
-            return <Expense />;
-        } else if (props.componentClick === 'Income') {
-            return <Income />;
-        } else if (props.componentClick === 'Account') {
-            return <Account />;
-        } else {
-            return <Dashboard />;
-        }
-    }
-
-    render() {
-        const { classes } = this.props;
-        if (this.state.uiLoading === true) {
-            return (
-                <div className={classes.root}>
-                    {this.state.uiLoading && <CircularProgress size={150} className={classes.uiProgess} />}
-                </div>
-            );
-        } else {
-            return (
-                <div className={classes.root}>
-                    <CssBaseline />
-                    <AppBar position="fixed" className={classes.appBar}>
-                        <Toolbar>
-                            <Typography variant="h6" noWrap>
-                                OrganizExpense
-							</Typography>
-                        </Toolbar>
-                    </AppBar>
-                    <Drawer
-                        className={classes.drawer}
-                        variant="permanent"
-                        classes={{
-                            paper: classes.drawerPaper
-                        }}
-                    >
-                        <div className={classes.toolbar} />
-                        <Divider />
-                        <center>
-                            <Avatar src={this.state.profilePicture} className={classes.avatar} />
-                            <p>
+    if (uiLoading === true) {
+        return (
+            <div className={classes.root}>
+                {uiLoading && <CircularProgress size={150} className={classes.uiProgess} />}
+            </div>
+        );
+    } else {
+        return (
+            <div className={classes.root}>
+                <CssBaseline />
+                <AppBar position="fixed" className={classes.appBar}>
+                    <Toolbar>
+                        <Typography variant="h6" noWrap>
+                            OrganizExpense
+                                </Typography>
+                    </Toolbar>
+                </AppBar>
+                <Drawer
+                    className={classes.drawer}
+                    variant="permanent"
+                    classes={{
+                        paper: classes.drawerPaper
+                    }}
+                >
+                    <div className={classes.toolbar} />
+                    <Divider />
+                    <center>
+                        <Avatar src={user.imageUrl} className={classes.avatar} />
+                        <p>
+                            {' '}
+                            {user.firstName} {user.lastName}
+                        </p>
+                    </center>
+                    <Divider />
+                    <List>
+                        <ListItem button key="Dashboard" onClick={loadDashboardPage}>
+                            <ListItemIcon>
                                 {' '}
-                                {this.state.firstName} {this.state.lastName}
-                            </p>
-                        </center>
-                        <Divider />
-                        <List>
-                            <ListItem button key="Dashboard" onClick={this.loadDashboardPage}>
-                                <ListItemIcon>
-                                    {' '}
-                                    <DashboardIcon />{' '}
-                                </ListItemIcon>
-                                <ListItemText primary="Dashboard" />
-                            </ListItem>
+                                <DashboardIcon />{' '}
+                            </ListItemIcon>
+                            <ListItemText primary="Dashboard" />
+                        </ListItem>
 
-                            <ListItem button key="Expense" onClick={this.loadExpensePage}>
-                                <ListItemIcon>
-                                    {' '}
-                                    <PaymentIcon />{' '}
-                                </ListItemIcon>
-                                <ListItemText primary="Expense" />
-                            </ListItem>
+                        <ListItem button key="Expense" onClick={loadExpensePage}>
+                            <ListItemIcon>
+                                {' '}
+                                <PaymentIcon />{' '}
+                            </ListItemIcon>
+                            <ListItemText primary="Expense" />
+                        </ListItem>
 
-                            <ListItem button key="Income" onClick={this.loadIncomePage}>
-                                <ListItemIcon>
-                                    {' '}
-                                    <AttachMoneyIcon /> {' '}
-                                </ListItemIcon>
-                                <ListItemText primary="Income" />
-                            </ListItem>
+                        <ListItem button key="Income" onClick={loadIncomePage}>
+                            <ListItemIcon>
+                                {' '}
+                                <AttachMoneyIcon /> {' '}
+                            </ListItemIcon>
+                            <ListItemText primary="Income" />
+                        </ListItem>
 
-                            <ListItem button key="Account" onClick={this.loadAccountPage}>
-                                <ListItemIcon>
-                                    {' '}
-                                    <AccountCircleIcon />{' '}
-                                </ListItemIcon>
-                                <ListItemText primary="Account" />
-                            </ListItem>
+                        <ListItem button key="Account" onClick={loadAccountPage}>
+                            <ListItemIcon>
+                                {' '}
+                                <AccountCircleIcon />{' '}
+                            </ListItemIcon>
+                            <ListItemText primary="Account" />
+                        </ListItem>
 
-                            <ListItem button key="Logout" onClick={this.logoutHandler}>
-                                <ListItemIcon>
-                                    {' '}
-                                    <ExitToAppIcon />{' '}
-                                </ListItemIcon>
-                                <ListItemText primary="Logout" />
-                            </ListItem>
-                        </List>
-                    </Drawer>
+                        <ListItem button key="Logout" onClick={logoutHandler}>
+                            <ListItemIcon>
+                                {' '}
+                                <ExitToAppIcon />{' '}
+                            </ListItemIcon>
+                            <ListItemText primary="Logout" />
+                        </ListItem>
+                    </List>
+                </Drawer>
 
-                    <div>
-                        <this.componentClickRender componentClick={this.state.componentClick} />
-                    </div>
+                <div><Menu componentClick={componentClick} /></div>
 
-                </div>
-            );
-        }
+            </div>
+        );
+
     }
+
 }
 
-export default withStyles(styles)(home)
+
+Home.prototype = {
+    uiLoading: PropTypes.bool.isRequired,
+    user: PropTypes.array.isRequired,
+    error: PropTypes.string.isRequired,
+    getUser: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+    uiLoading: state.user.uiLoading,
+    user: state.user.user,
+    error: state.user.error,
+});
+
+const mapDispatchToProps = {
+    getUser
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);
