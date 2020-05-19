@@ -40,10 +40,12 @@ const styles = (theme) => ({
         height: '31px',
         width: '31px',
         left: '50%',
-        top: '35%'
+        top: '35%',
+        color: 'yellow',
     },
     progess: {
-        position: 'absolute'
+        position: 'absolute',
+        color: 'yellow',
     },
     uploadButton: {
         marginLeft: '8px',

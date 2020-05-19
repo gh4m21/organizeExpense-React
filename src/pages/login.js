@@ -1,5 +1,8 @@
 // Material UI components
 import React, { Component } from 'react';
+
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -14,9 +17,35 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 import axios from 'axios';
 
+
+const CssTextField = withStyles({
+    root: {
+        '& label': {
+            color: '#43c2d5',
+        },
+        '& label.Mui-focused': {
+            color: '#137988',
+        },
+        '& .MuiInput-underline:after': {
+            borderBottomColor: '#137988',
+        },
+        '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+                borderColor: '#137988',
+            },
+            '&:hover fieldset': {
+                borderColor: 'yellow',
+            },
+            '&.Mui-focused fieldset': {
+                borderColor: '#137988',
+            },
+        },
+    },
+})(TextField);
+
 const styles = (theme) => ({
     paper: {
-        marginTop: theme.spacing(8),
+        marginTop: theme.spacing(10),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center'
@@ -27,10 +56,11 @@ const styles = (theme) => ({
     },
     form: {
         width: '100%',
-        marginTop: theme.spacing(1)
+        marginTop: theme.spacing(1),
     },
     submit: {
-        margin: theme.spacing(3, 0, 2)
+        margin: theme.spacing(3, 0, 2),
+        backgroundColor: '#114B5F',
     },
     customError: {
         color: 'red',
@@ -38,7 +68,22 @@ const styles = (theme) => ({
         marginTop: 10
     },
     progess: {
-        position: 'absolute'
+        position: 'absolute',
+        color: 'yellow',
+    },
+    title: {
+        color: '#FED766',
+    },
+    appBar: {
+        zIndex: theme.zIndex.drawer + 1,
+        backgroundColor: '#114B5F',
+    },
+    link: {
+        color: '#b9f022'
+    },
+    inputColor: {
+        color: '#e1e1d7',
+        backgroundColor: '#114b5f',
     }
 });
 
@@ -101,6 +146,14 @@ class login extends Component {
         return (
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
+                <AppBar position="fixed" className={classes.appBar}>
+                    <Toolbar>
+                        <Typography className={classes.title} variant="h6" noWrap>
+                            OrganizExpense
+                                </Typography>
+                    </Toolbar>
+                </AppBar>
+
                 <div className={classes.paper}>
                     <Avatar className={classes.avatar}>
                         <LockOutlinedIcon />
@@ -109,7 +162,7 @@ class login extends Component {
                         Login
 					</Typography>
                     <form className={classes.form} noValidate>
-                        <TextField
+                        <CssTextField
                             variant="outlined"
                             margin="normal"
                             required
@@ -122,8 +175,13 @@ class login extends Component {
                             helperText={errors.email}
                             error={errors.email ? true : false}
                             onChange={this.handleChange}
+                            InputProps={{
+                                classes: {
+                                    input: classes.inputColor
+                                }
+                            }}
                         />
-                        <TextField
+                        <CssTextField
                             variant="outlined"
                             margin="normal"
                             required
@@ -136,6 +194,11 @@ class login extends Component {
                             helperText={errors.password}
                             error={errors.password ? true : false}
                             onChange={this.handleChange}
+                            InputProps={{
+                                classes: {
+                                    input: classes.inputColor
+                                }
+                            }}
                         />
                         <Button
                             type="submit"
@@ -151,7 +214,7 @@ class login extends Component {
                         </Button>
                         <Grid container>
                             <Grid item>
-                                <Link href="signup" variant="body2">
+                                <Link href="signup" variant="body2" className={classes.link}>
                                     {"Don't have an account? Sign Up"}
                                 </Link>
                             </Grid>

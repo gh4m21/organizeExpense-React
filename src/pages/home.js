@@ -8,6 +8,7 @@ import Menu from '../components/Menu';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import Hidden from '@material-ui/core/Hidden';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
@@ -15,33 +16,43 @@ import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import { makeStyles } from '@material-ui/core/styles';
-import withStyles from '@material-ui/core/styles/withStyles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import AttachMoneyIcon from "@material-ui/icons/AttachMoney";
 import PaymentIcon from "@material-ui/icons/Payment";
+import MenuIcon from '@material-ui/icons/Menu';
+import IconButton from '@material-ui/core/IconButton';
 import Avatar from '@material-ui/core/avatar';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import CircularProgress from '@material-ui/core/CircularProgress';
-
 import { authMiddleWare } from '../util/auth'
 
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        display: 'flex'
+        display: 'flex',
     },
     appBar: {
-        zIndex: theme.zIndex.drawer + 1
+        zIndex: theme.zIndex.drawer + 1,
+        backgroundColor: '#114B5F',
+    },
+    menuButton: {
+        marginRight: theme.spacing(2),
+        [theme.breakpoints.up('md')]: {
+            display: 'none',
+        },
     },
     drawer: {
-        width: drawerWidth,
-        flexShrink: 0
+        [theme.breakpoints.up('md')]: {
+            width: drawerWidth,
+            flexShrink: 0,
+        },
     },
     drawerPaper: {
-        width: drawerWidth
+        width: drawerWidth,
+        backgroundColor: '#114B5F',
     },
     content: {
         flexGrow: 1,
@@ -52,7 +63,10 @@ const useStyles = makeStyles((theme) => ({
         width: 100,
         flexShrink: 0,
         flexGrow: 0,
-        marginTop: 20
+        marginTop: 20,
+    },
+    avatarName: {
+        color: '#E8E8E8',
     },
     uiProgess: {
         position: 'fixed',
@@ -60,7 +74,17 @@ const useStyles = makeStyles((theme) => ({
         height: '31px',
         width: '31px',
         left: '50%',
-        top: '35%'
+        top: '35%',
+        color: 'yellow',
+    },
+    title: {
+        color: '#FED766',
+    },
+    menuItem: {
+        color: '#b9f022',
+    },
+    menu: {
+        backgroundColor: '#114B5F',
     },
     toolbar: theme.mixins.toolbar
 }));
@@ -68,10 +92,12 @@ const useStyles = makeStyles((theme) => ({
 
 const Home = (props) => {
 
-    const { history, getUser, user, uiLoading, error } = props;
+    const { history, getUser, user, uiLoading, error, window } = props;
 
     const classes = useStyles();
+    const theme = useTheme();
 
+    const [mobileOpen, setMobileOpen] = React.useState(false);
     const [componentClick, setComponentClick] = useState('');
     const [userDetails, setUserDetails] = useState({
         firstName: '',
@@ -82,6 +108,10 @@ const Home = (props) => {
         uiLoading: true,
         imageLoading: false
     });
+
+    const menuToggle = () => {
+        setMobileOpen(!mobileOpen);
+    };
 
     useEffect(() => {
         getUser(history);
@@ -98,24 +128,89 @@ const Home = (props) => {
 
     const loadDashboardPage = (event) => {
         setComponentClick('Dashboard');
+        setMobileOpen(false);
     };
 
     const loadAccountPage = (event) => {
         setComponentClick('Account');
+        setMobileOpen(false);
     };
 
     const loadExpensePage = (event) => {
         setComponentClick('Expense');
+        setMobileOpen(false);
     };
 
     const loadIncomePage = (event) => {
         setComponentClick('Income');
+        setMobileOpen(false);
     };
 
     const logoutHandler = (event) => {
         localStorage.removeItem('AuthToken');
         history.push('/login');
     };
+
+
+    const drawer = (
+        <div >
+            <div className={classes.toolbar} />
+            <Divider />
+            <center>
+                <Avatar src={user.imageUrl} className={classes.avatar} />
+                <p className={classes.avatarName}>
+                    {' '}
+                    {user.firstName} {user.lastName}
+                </p>
+            </center>
+            <Divider />
+            <List className={classes.menuItem}>
+                <ListItem button key="Dashboard" onClick={loadDashboardPage}>
+                    <ListItemIcon>
+                        {' '}
+                        <DashboardIcon />{' '}
+                    </ListItemIcon>
+                    <ListItemText primary="Dashboard" />
+                </ListItem>
+
+                <ListItem button key="Expense" onClick={loadExpensePage}>
+                    <ListItemIcon>
+                        {' '}
+                        <PaymentIcon />{' '}
+                    </ListItemIcon>
+                    <ListItemText primary="Expense" />
+                </ListItem>
+
+                <ListItem button key="Income" onClick={loadIncomePage}>
+                    <ListItemIcon>
+                        {' '}
+                        <AttachMoneyIcon /> {' '}
+                    </ListItemIcon>
+                    <ListItemText primary="Income" />
+                </ListItem>
+
+                <ListItem button key="Account" onClick={loadAccountPage}>
+                    <ListItemIcon>
+                        {' '}
+                        <AccountCircleIcon />{' '}
+                    </ListItemIcon>
+                    <ListItemText primary="Account" />
+                </ListItem>
+
+                <ListItem button key="Logout" onClick={logoutHandler}>
+                    <ListItemIcon>
+                        {' '}
+                        <ExitToAppIcon />{' '}
+                    </ListItemIcon>
+                    <ListItemText primary="Logout" />
+                </ListItem>
+            </List>
+        </div>
+    );
+
+
+    const container = window !== undefined ? () => window().document.body : undefined;
+
 
     if (uiLoading === true) {
         return (
@@ -129,72 +224,59 @@ const Home = (props) => {
                 <CssBaseline />
                 <AppBar position="fixed" className={classes.appBar}>
                     <Toolbar>
-                        <Typography variant="h6" noWrap>
+                        <IconButton
+                            color="inherit"
+                            aria-label="open drawer"
+                            edge="start"
+                            onClick={menuToggle}
+                            className={classes.menuButton}
+                        >
+                            <MenuIcon />
+                        </IconButton>
+                        <Typography className={classes.title} variant="h6" noWrap>
                             OrganizExpense
                                 </Typography>
                     </Toolbar>
                 </AppBar>
-                <Drawer
-                    className={classes.drawer}
-                    variant="permanent"
-                    classes={{
-                        paper: classes.drawerPaper
-                    }}
-                >
-                    <div className={classes.toolbar} />
-                    <Divider />
-                    <center>
-                        <Avatar src={user.imageUrl} className={classes.avatar} />
-                        <p>
-                            {' '}
-                            {user.firstName} {user.lastName}
-                        </p>
-                    </center>
-                    <Divider />
-                    <List>
-                        <ListItem button key="Dashboard" onClick={loadDashboardPage}>
-                            <ListItemIcon>
-                                {' '}
-                                <DashboardIcon />{' '}
-                            </ListItemIcon>
-                            <ListItemText primary="Dashboard" />
-                        </ListItem>
 
-                        <ListItem button key="Expense" onClick={loadExpensePage}>
-                            <ListItemIcon>
-                                {' '}
-                                <PaymentIcon />{' '}
-                            </ListItemIcon>
-                            <ListItemText primary="Expense" />
-                        </ListItem>
+                <nav className={classes.drawer} aria-label="mailbox folders">
+                    {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
+                    <Hidden mdUp implementation="css">
 
-                        <ListItem button key="Income" onClick={loadIncomePage}>
-                            <ListItemIcon>
-                                {' '}
-                                <AttachMoneyIcon /> {' '}
-                            </ListItemIcon>
-                            <ListItemText primary="Income" />
-                        </ListItem>
+                        <Drawer
+                            container={container}
+                            variant="temporary"
+                            anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+                            open={mobileOpen}
+                            onClose={menuToggle}
+                            classes={{
+                                paper: classes.drawerPaper,
+                            }}
+                            ModalProps={{
+                                keepMounted: true, // Better open performance on mobile.
+                            }}
+                        >
+                            {drawer}
+                        </Drawer>
+                    </Hidden>
 
-                        <ListItem button key="Account" onClick={loadAccountPage}>
-                            <ListItemIcon>
-                                {' '}
-                                <AccountCircleIcon />{' '}
-                            </ListItemIcon>
-                            <ListItemText primary="Account" />
-                        </ListItem>
+                    <Hidden smDown implementation="css">
+                        <Drawer
+                            classes={{
+                                paper: classes.drawerPaper,
+                            }}
+                            variant="permanent"
+                            open
+                        >
+                            {drawer}
+                        </Drawer>
+                    </Hidden>
 
-                        <ListItem button key="Logout" onClick={logoutHandler}>
-                            <ListItemIcon>
-                                {' '}
-                                <ExitToAppIcon />{' '}
-                            </ListItemIcon>
-                            <ListItemText primary="Logout" />
-                        </ListItem>
-                    </List>
-                </Drawer>
+                </nav>
 
-                <div><Menu componentClick={componentClick} /></div>
+                <div>
+                    <Menu componentClick={componentClick} />
+                </div>
 
             </div>
         );
@@ -209,6 +291,7 @@ Home.prototype = {
     user: PropTypes.array.isRequired,
     error: PropTypes.string.isRequired,
     getUser: PropTypes.func.isRequired,
+    window: PropTypes.func,
 };
 
 const mapStateToProps = (state) => ({

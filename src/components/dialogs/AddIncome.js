@@ -6,8 +6,8 @@ import PropTypes from 'prop-types';
 import { makeStyles, withStyles, } from '@material-ui/core/styles';
 
 import { connect } from 'react-redux';
-import { addExpense } from '../../redux/actions/expense';
-import { loadCategoryExpense } from '../../redux/actions/categoryExpense';
+import { addIncome } from '../../redux/actions/income';
+import { loadCategoryIncome } from '../../redux/actions/categoryIncome';
 import { loadCurrency } from '../../redux/actions/currency';
 
 import Button from '@material-ui/core/Button';
@@ -139,14 +139,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const AddExpense = (props) => {
+const AddIncome = (props) => {
 
     const {
-        addExpense,
-        loadCategoryExpense,
+        addIncome,
+        loadCategoryIncome,
         loadCurrency,
         currencies,
-        categoryExpense,
+        categoryIncome,
         history,
     } = props;
 
@@ -162,7 +162,7 @@ const AddExpense = (props) => {
 
     const handleOpen = () => {
         setOpen(true);
-        loadCategoryExpense();
+        loadCategoryIncome();
         loadCurrency();
     };
     const handleClose = () => {
@@ -177,14 +177,14 @@ const AddExpense = (props) => {
     };
     const handleSubmit = (event) => {
         event.preventDefault();
-        const expenseData = {
+        const incomeData = {
             description: data.description,
             category: data.category,
             amount: data.amount,
             currency: data.currency,
         };
 
-        addExpense(history, expenseData);
+        addIncome(history, incomeData);
         setData({
             description: '',
             category: '',
@@ -203,7 +203,7 @@ const AddExpense = (props) => {
 
             <Fab
                 color="primary"
-                title="Add Expense"
+                title="Add Income"
                 className={classes.floatingButton}
                 onClick={handleOpen}
             >
@@ -216,7 +216,7 @@ const AddExpense = (props) => {
                 fullWidth
                 maxWidth="sm"
             >
-                <DialogTitle className={classes.title}>Add your Expense</DialogTitle>
+                <DialogTitle className={classes.title}>Add your Income</DialogTitle>
                 <DialogContent className={classes.dialogBody}>
                     <form>
                         <CssTextField
@@ -255,7 +255,7 @@ const AddExpense = (props) => {
                             margin="normal"
                             size="small"
                         >
-                            {categoryExpense.map((category) => (
+                            {categoryIncome.map((category) => (
                                 <MenuItem key={category.description} value={category.description}>
                                     {capitalizeFLetter(category.description)}
                                 </MenuItem>
@@ -319,25 +319,25 @@ const AddExpense = (props) => {
     )
 }
 
-AddExpense.prototype = {
+AddIncome.prototype = {
     uiLoading: PropTypes.bool.isRequired,
-    categoryExpense: PropTypes.array.isRequired,
+    categoryIncome: PropTypes.array.isRequired,
     currencies: PropTypes.array.isRequired,
-    addExpense: PropTypes.func.isRequired,
-    loadCategoryExpense: PropTypes.func.isRequired,
+    addIncome: PropTypes.func.isRequired,
+    loadCategoryIncome: PropTypes.func.isRequired,
     loadCurrency: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-    errors: state.expense.errors,
-    categoryExpense: state.categoryExpense.categoryExpense,
+    errors: state.income.errors,
+    categoryIncome: state.categoryIncome.categoryIncome,
     currencies: state.currency.currencies,
 });
 
 const mapDispatchToProps = {
-    addExpense,
-    loadCategoryExpense,
+    addIncome,
+    loadCategoryIncome,
     loadCurrency,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddExpense);
+export default connect(mapStateToProps, mapDispatchToProps)(AddIncome);

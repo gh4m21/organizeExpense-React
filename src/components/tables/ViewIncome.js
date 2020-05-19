@@ -14,9 +14,9 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import moment from 'moment';
 
 import { connect } from 'react-redux';
-import { loadExpense } from '../../redux/actions/expense';
+import { loadIncome } from '../../redux/actions/income';
 import PropTypes from 'prop-types';
-import EditExpense from '../dialogs/EditExpense';
+import EditIncome from '../dialogs/EditIncome';
 
 
 const StyledTableCell = withStyles((theme) => ({
@@ -85,12 +85,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const ViewExpense = (props) => {
+const ViewIncome = (props) => {
 
-    const { loadExpense, uiLoading, expenses, history } = props;
+    const { loadIncome, uiLoading, incomes, history } = props;
 
     useEffect(() => {
-        loadExpense(history, '');
+        loadIncome(history, '');
     }, []);
 
     const classes = useStyles();
@@ -120,18 +120,18 @@ const ViewExpense = (props) => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {expenses.map((expense) => (
+                        {incomes.map((income) => (
 
-                            <StyledTableRow key={expense}>
+                            <StyledTableRow key={income}>
                                 <StyledTableCell component="th" scope="row">
-                                    {capitalizeFLetter(expense.description)}
+                                    {capitalizeFLetter(income.description)}
                                 </StyledTableCell>
-                                <StyledTableCell align="left">{capitalizeFLetter(expense.category)}</StyledTableCell>
-                                <StyledTableCell align="left">{expense.amount} {expense.currency}</StyledTableCell>
-                                <StyledTableCell align="left">{moment(expense.date).format("DD/MM/YYYY hh:mm a").toString()}</StyledTableCell>
+                                <StyledTableCell align="left">{capitalizeFLetter(income.category)}</StyledTableCell>
+                                <StyledTableCell align="left">{income.amount} {income.currency}</StyledTableCell>
+                                <StyledTableCell align="left">{moment(income.date).format("DD/MM/YYYY hh:mm a").toString()}</StyledTableCell>
                                 <StyledTableCell align="left">
 
-                                    <EditExpense expense={expense} />
+                                    <EditIncome income={income} />
 
                                 </StyledTableCell>
                             </StyledTableRow>
@@ -143,19 +143,19 @@ const ViewExpense = (props) => {
     }
 }
 
-ViewExpense.prototype = {
+ViewIncome.prototype = {
     uiLoading: PropTypes.bool.isRequired,
-    expenses: PropTypes.array.isRequired,
-    loadExpense: PropTypes.func.isRequired,
+    incomes: PropTypes.array.isRequired,
+    loadIncome: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-    uiLoading: state.expense.uiLoading,
-    expenses: state.expense.expenses,
+    uiLoading: state.income.uiLoading,
+    incomes: state.income.incomes,
 });
 
 const mapDispatchToProps = {
-    loadExpense
+    loadIncome
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ViewExpense);
+export default connect(mapStateToProps, mapDispatchToProps)(ViewIncome);

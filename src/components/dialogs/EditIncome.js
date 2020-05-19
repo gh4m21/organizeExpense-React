@@ -3,11 +3,11 @@ import React, {
     useState
 } from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles, withStyles, } from '@material-ui/core/styles';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 
 import { connect } from 'react-redux';
-import { addExpense } from '../../redux/actions/expense';
-import { loadCategoryExpense } from '../../redux/actions/categoryExpense';
+import { editIncome } from '../../redux/actions/income';
+import { loadCategoryIncome } from '../../redux/actions/categoryIncome';
 import { loadCurrency } from '../../redux/actions/currency';
 
 import Button from '@material-ui/core/Button';
@@ -17,8 +17,8 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add';
+import EditIcon from '@material-ui/icons/Edit';
+import IconButton from '@material-ui/core/IconButton';
 
 
 const CssTextField = withStyles({
@@ -46,37 +46,24 @@ const CssTextField = withStyles({
     },
 })(TextField);
 
-
 const useStyles = makeStyles((theme) => ({
     content: {
         flexGrow: 1,
         padding: theme.spacing(3),
+        backgroundColor: '#006773',
     },
     toolbar: theme.mixins.toolbar,
     title: {
         marginLeft: theme.spacing(2),
-        flex: 1,
+        flex: 1
     },
     title: {
         backgroundColor: '#114b5f',
         color: '#ebe9d9',
     },
     submitButton: {
-        display: 'block',
-        color: 'white',
+        color: '#b9f022',
         textAlign: 'center',
-        position: 'absolute',
-        top: 14,
-        right: 10
-    },
-    floatingButton: {
-        position: 'fixed',
-        bottom: 0,
-        right: 0,
-        marginRight: theme.spacing(3),
-        marginBottom: theme.spacing(3),
-        color: '#b9f021',
-        backgroundColor: '#114B5F',
     },
     form: {
         width: '98%',
@@ -117,7 +104,7 @@ const useStyles = makeStyles((theme) => ({
         color: '#000000',
     },
     iconEdit: {
-        color: '#0275d8',
+        color: '#b9f021',
     },
     textField: {
         spacing: theme.spacing(0),
@@ -139,30 +126,26 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const AddExpense = (props) => {
+const EditIncome = (props) => {
 
     const {
-        addExpense,
-        loadCategoryExpense,
+        income,
+        editIncome,
+        loadCategoryIncome,
         loadCurrency,
         currencies,
-        categoryExpense,
+        categoryIncome,
         history,
     } = props;
 
     const classes = useStyles();
 
     const [open, setOpen] = useState(false);
-    const [data, setData] = useState({
-        description: '',
-        category: '',
-        amount: '',
-        currency: '',
-    });
+    const [data, setData] = useState(income);
 
     const handleOpen = () => {
         setOpen(true);
-        loadCategoryExpense();
+        loadCategoryIncome();
         loadCurrency();
     };
     const handleClose = () => {
@@ -177,20 +160,17 @@ const AddExpense = (props) => {
     };
     const handleSubmit = (event) => {
         event.preventDefault();
-        const expenseData = {
+        const incomeData = {
             description: data.description,
             category: data.category,
             amount: data.amount,
             currency: data.currency,
+            username: income.username,
+            idIncome: income.idIncome,
+            date: income.date,
         };
 
-        addExpense(history, expenseData);
-        setData({
-            description: '',
-            category: '',
-            amount: '',
-            currency: '',
-        });
+        editIncome(history, incomeData);
         handleClose();
     };
 
@@ -199,24 +179,23 @@ const AddExpense = (props) => {
     }
 
     return (
-        <Fragment>
+        <Fragment >
 
-            <Fab
-                color="primary"
-                title="Add Expense"
-                className={classes.floatingButton}
+            <IconButton
+                className={classes.iconEdit}
+                title="Edit Income"
                 onClick={handleOpen}
+                size="small"
             >
-                <AddIcon />
-            </Fab>
-
+                <EditIcon />
+            </IconButton>
             <Dialog
                 open={open}
                 onClose={handleClose}
                 fullWidth
                 maxWidth="sm"
             >
-                <DialogTitle className={classes.title}>Add your Expense</DialogTitle>
+                <DialogTitle className={classes.title}>Edit your Income</DialogTitle>
                 <DialogContent className={classes.dialogBody}>
                     <form>
                         <CssTextField
@@ -255,7 +234,7 @@ const AddExpense = (props) => {
                             margin="normal"
                             size="small"
                         >
-                            {categoryExpense.map((category) => (
+                            {categoryIncome.map((category) => (
                                 <MenuItem key={category.description} value={category.description}>
                                     {capitalizeFLetter(category.description)}
                                 </MenuItem>
@@ -319,25 +298,25 @@ const AddExpense = (props) => {
     )
 }
 
-AddExpense.prototype = {
+EditIncome.prototype = {
     uiLoading: PropTypes.bool.isRequired,
-    categoryExpense: PropTypes.array.isRequired,
+    categoryIncome: PropTypes.array.isRequired,
     currencies: PropTypes.array.isRequired,
-    addExpense: PropTypes.func.isRequired,
-    loadCategoryExpense: PropTypes.func.isRequired,
+    editIncome: PropTypes.func.isRequired,
+    loadCategoryIncome: PropTypes.func.isRequired,
     loadCurrency: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-    errors: state.expense.errors,
-    categoryExpense: state.categoryExpense.categoryExpense,
+    errors: state.income.errors,
+    categoryIncome: state.categoryIncome.categoryIncome,
     currencies: state.currency.currencies,
 });
 
 const mapDispatchToProps = {
-    addExpense,
-    loadCategoryExpense,
+    editIncome,
+    loadCategoryIncome,
     loadCurrency,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddExpense);
+export default connect(mapStateToProps, mapDispatchToProps)(EditIncome);

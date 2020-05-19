@@ -48,7 +48,11 @@ const styles = ((theme) => ({
     toolbar: theme.mixins.toolbar,
     title: {
         marginLeft: theme.spacing(2),
-        flex: 1
+        flex: 0,
+        textAlign: 'left',
+    },
+    title: {
+        color: '#ebe9d9',
     },
     submitButton: {
         display: 'block',
@@ -86,7 +90,8 @@ const styles = ((theme) => ({
         height: '31px',
         width: '31px',
         left: '50%',
-        top: '35%'
+        top: '35%',
+        color: 'yellow',
     },
     dialogeStyle: {
         maxWidth: '50%'
@@ -115,6 +120,8 @@ const Expense = (props) => {
     return (
         <main className={classes.content}>
             <div className={classes.toolbar} />
+
+            <Typography align="left" className={classes.title} variant="h5">List Expense</Typography>
 
             <ViewExpense />
 

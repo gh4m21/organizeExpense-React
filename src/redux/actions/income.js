@@ -1,40 +1,40 @@
 import {
-    EXPENSE_FETCH_REQUEST,
-    EXPENSE_FETCH_SUCCESS,
-    EXPENSE_FETCH_FAIL,
-    EDIT_EXPENSE_REQUEST,
-    EDIT_EXPENSE_FAIL,
-    EDIT_EXPENSE_SUCCESS,
-    ADD_EXPENSE_REQUEST,
-    ADD_EXPENSE_FAIL,
-    ADD_EXPENSE_SUCCESS,
-} from '../actions/Constants';
+    INCOME_FETCH_REQUEST,
+    INCOME_FETCH_SUCCESS,
+    INCOME_FETCH_FAIL,
+    EDIT_INCOME_REQUEST,
+    EDIT_INCOME_FAIL,
+    EDIT_INCOME_SUCCESS,
+    ADD_INCOME_REQUEST,
+    ADD_INCOME_FAIL,
+    ADD_INCOME_SUCCESS,
+} from './Constants';
 import axios from 'axios';
 import { authMiddleWare } from '../../util/auth';
 
 
-export const loadExpense = (history, expenses) => dispatch => {
+export const loadIncome = (history, incomes) => dispatch => {
 
     dispatch({
-        type: EXPENSE_FETCH_REQUEST,
+        type: INCOME_FETCH_REQUEST,
     });
 
     authMiddleWare(history)
     const authToken = localStorage.getItem('AuthToken');
     axios.defaults.headers.common = { Authorization: `${authToken}` };
 
-    if (expenses === '') { //load all expense
+    if (incomes === '') { //load all expense
         axios
-            .get('/expense')
+            .get('/income')
             .then((response) => {
                 dispatch({
-                    type: EXPENSE_FETCH_SUCCESS,
+                    type: INCOME_FETCH_SUCCESS,
                     payload: response.data
                 });
             })
             .catch((error) => {
                 dispatch({
-                    type: EXPENSE_FETCH_FAIL,
+                    type: INCOME_FETCH_FAIL,
                 });
                 if (error.response.status === 403) {
                     history.push('/login')
@@ -42,18 +42,18 @@ export const loadExpense = (history, expenses) => dispatch => {
                 console.log('error');
             });
 
-    } else { //load one expense
+    } else { //load one income
         axios
-            .get(`/expense/${expenses.idExpense}`)
+            .get(`/expense/${incomes.idIncome}`)
             .then((response) => {
                 dispatch({
-                    type: EXPENSE_FETCH_SUCCESS,
+                    type: INCOME_FETCH_SUCCESS,
                     payload: response.data
                 });
             })
             .catch((error) => {
                 dispatch({
-                    type: EXPENSE_FETCH_FAIL,
+                    type: INCOME_FETCH_FAIL,
                     payload: error
                 });
 
@@ -67,50 +67,50 @@ export const loadExpense = (history, expenses) => dispatch => {
 
 }
 
-export const editExpense = (history, expenses) => dispatch => {
+export const editIncome = (history, incomes) => dispatch => {
     dispatch({
-        type: EDIT_EXPENSE_REQUEST,
+        type: EDIT_INCOME_REQUEST,
     });
 
     authMiddleWare(history)
     const authToken = localStorage.getItem('AuthToken');
     axios.defaults.headers.common = { Authorization: `${authToken}` };
 
-    const userExpense = {
-        description: expenses.description,
-        category: expenses.category,
-        amount: expenses.amount,
-        currency: expenses.currency,
+    const userIncome = {
+        description: incomes.description,
+        category: incomes.category,
+        amount: incomes.amount,
+        currency: incomes.currency,
     }
 
     let options = {};
     options = {
-        url: `/expense/${expenses.idExpense}`,
+        url: `/income/${incomes.idIncome}`,
         method: 'put',
-        data: userExpense
+        data: userIncome
     }
 
     axios(options)
         .then((response) => {
             dispatch({
-                type: EDIT_EXPENSE_SUCCESS,
+                type: EDIT_INCOME_SUCCESS,
                 payload: response.data
             });
         }).then(() => {
-            dispatch(loadExpense(history, ''));
+            dispatch(loadIncome(history, ''));
         })
         .catch((error) => {
             dispatch({
-                type: EDIT_EXPENSE_FAIL,
+                type: EDIT_INCOME_FAIL,
                 payload: error
             });
             console.log('error');
         });
 }
 
-export const addExpense = (history, expensesData) => dispatch => {
+export const addIncome = (history, incomesData) => dispatch => {
     dispatch({
-        type: ADD_EXPENSE_REQUEST,
+        type: ADD_INCOME_REQUEST,
     });
 
     authMiddleWare(history)
@@ -119,22 +119,22 @@ export const addExpense = (history, expensesData) => dispatch => {
 
     let options = {};
     options = {
-        url: '/expense',
+        url: '/income',
         method: 'post',
-        data: expensesData
+        data: incomesData
     }
 
     axios(options)
         .then((response) => {
             dispatch({
-                type: ADD_EXPENSE_SUCCESS,
+                type: ADD_INCOME_SUCCESS,
             });
         }).then(() => {
-            dispatch(loadExpense(history, ''));
+            dispatch(loadIncome(history, ''));
         })
         .catch((error) => {
             dispatch({
-                type: ADD_EXPENSE_FAIL,
+                type: ADD_INCOME_FAIL,
                 payload: error
             });
             console.log('error');

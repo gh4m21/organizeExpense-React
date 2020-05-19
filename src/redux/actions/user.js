@@ -27,7 +27,7 @@ export const getUser = (history) => dispatch => {
         })
         .catch((error) => {
             if (error.response.status === 403) {
-                history.push('/login')
+                history.push('/login');
             }
 
             dispatch({

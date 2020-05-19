@@ -1,5 +1,7 @@
 
 import React, { Component } from 'react';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -16,7 +18,7 @@ import axios from 'axios';
 
 const styles = (theme) => ({
     paper: {
-        marginTop: theme.spacing(8),
+        marginTop: theme.spacing(10),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center'
@@ -34,7 +36,14 @@ const styles = (theme) => ({
     },
     progess: {
         position: 'absolute'
-    }
+    },
+    title: {
+        color: '#FED766',
+    },
+    appBar: {
+        zIndex: theme.zIndex.drawer + 1,
+        backgroundColor: '#114B5F',
+    },
 });
 
 class signup extends Component {
@@ -106,6 +115,13 @@ class signup extends Component {
         return (
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
+                <AppBar position="fixed" className={classes.appBar}>
+                    <Toolbar>
+                        <Typography className={classes.title} variant="h6" noWrap>
+                            OrganizExpense
+                                </Typography>
+                    </Toolbar>
+                </AppBar>
                 <div className={classes.paper}>
                     <Avatar className={classes.avatar}>
                         <LockOutlinedIcon />

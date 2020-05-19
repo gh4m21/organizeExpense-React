@@ -1,5 +1,11 @@
+html {
+  background-color: #006773;
+}
+
 .App {
   text-align: center;
+  background-color: #006773;
+  height: 100%;
 }
 
 h1 {

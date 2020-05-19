@@ -3,7 +3,7 @@ import React, {
     useState
 } from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 
 import { connect } from 'react-redux';
 import { editExpense } from '../../redux/actions/expense';
@@ -21,6 +21,31 @@ import EditIcon from '@material-ui/icons/Edit';
 import IconButton from '@material-ui/core/IconButton';
 
 
+const CssTextField = withStyles({
+    root: {
+        '& label': {
+            color: '#43c2d5',
+        },
+        '& label.Mui-focused': {
+            color: '#137988',
+        },
+        '& .MuiInput-underline:after': {
+            borderBottomColor: '#137988',
+        },
+        '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+                borderColor: '#137988',
+            },
+            '&:hover fieldset': {
+                borderColor: 'yellow',
+            },
+            '&.Mui-focused fieldset': {
+                borderColor: '#137988',
+            },
+        },
+    },
+})(TextField);
+
 const useStyles = makeStyles((theme) => ({
     content: {
         flexGrow: 1,
@@ -32,6 +57,10 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: theme.spacing(2),
         flex: 1
     },
+    title: {
+        backgroundColor: '#114b5f',
+        color: '#ebe9d9',
+    },
     submitButton: {
         color: '#b9f022',
         textAlign: 'center',
@@ -41,7 +70,6 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: 13,
         marginTop: theme.spacing(3)
     },
-    toolbar: theme.mixins.toolbar,
     root: {
         minWidth: 470
     },
@@ -59,7 +87,8 @@ const useStyles = makeStyles((theme) => ({
         height: '31px',
         width: '31px',
         left: '50%',
-        top: '35%'
+        top: '35%',
+        color: 'yellow',
     },
     dialogeStyle: {
         maxWidth: '50%'
@@ -75,11 +104,24 @@ const useStyles = makeStyles((theme) => ({
         color: '#000000',
     },
     iconEdit: {
-        color: '#0275d8',
+        color: '#b9f021',
     },
     textField: {
         spacing: theme.spacing(0),
         height: 10,
+    },
+    dialogBody: {
+        backgroundColor: "#015a68",
+    },
+    actionDialog: {
+        backgroundColor: "#114b5f",
+    },
+    link: {
+        color: "#b9f021",
+    },
+    inputColor: {
+        color: '#e1e1d7',
+        backgroundColor: '#114b5f',
     }
 }));
 
@@ -140,6 +182,7 @@ const EditExpense = (props) => {
         <Fragment >
 
             <IconButton
+                className={classes.iconEdit}
                 title="Edit Expense"
                 onClick={handleOpen}
                 size="small"
@@ -152,12 +195,17 @@ const EditExpense = (props) => {
                 fullWidth
                 maxWidth="sm"
             >
-                <DialogTitle>Edit your Expense</DialogTitle>
-                <DialogContent >
+                <DialogTitle className={classes.title}>Edit your Expense</DialogTitle>
+                <DialogContent className={classes.dialogBody}>
                     <form>
-                        <TextField
+                        <CssTextField
                             variant="outlined"
                             fullWidth
+                            InputProps={{
+                                classes: {
+                                    input: classes.inputColor
+                                }
+                            }}
                             rows="3"
                             type="text"
                             label="Description"
@@ -169,8 +217,13 @@ const EditExpense = (props) => {
                             onChange={handleChange}
                         />
 
-                        <TextField
+                        <CssTextField
                             select
+                            InputProps={{
+                                classes: {
+                                    input: classes.inputColor
+                                }
+                            }}
                             name="category"
                             variant="outlined"
                             value={data.category}
@@ -187,11 +240,16 @@ const EditExpense = (props) => {
                                 </MenuItem>
                             ))}
 
-                        </TextField>
+                        </CssTextField>
 
-                        <TextField
+                        <CssTextField
                             variant="outlined"
                             fullWidth
+                            InputProps={{
+                                classes: {
+                                    input: classes.inputColor
+                                }
+                            }}
                             rows="3"
                             type="number"
                             label="Amount"
@@ -201,8 +259,13 @@ const EditExpense = (props) => {
                             value={data.amount}
                             onChange={handleChange}
                         />
-                        <TextField
+                        <CssTextField
                             select
+                            InputProps={{
+                                classes: {
+                                    input: classes.inputColor
+                                }
+                            }}
                             name="currency"
                             variant="outlined"
                             value={data.currency}
@@ -218,15 +281,15 @@ const EditExpense = (props) => {
                                     {capitalizeFLetter(currency.description)}
                                 </MenuItem>
                             ))}
-                        </TextField>
+                        </CssTextField>
 
                     </form>
                 </DialogContent>
-                <DialogActions >
-                    <Button onClick={handleClose}>
+                <DialogActions className={classes.actionDialog}>
+                    <Button className={classes.link} onClick={handleClose}>
                         Cancel
             </Button>
-                    <Button onClick={handleSubmit}>
+                    <Button className={classes.link} onClick={handleSubmit}>
                         Save
             </Button>
                 </DialogActions>
