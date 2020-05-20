@@ -23,7 +23,7 @@ import AttachMoneyIcon from "@material-ui/icons/AttachMoney";
 import PaymentIcon from "@material-ui/icons/Payment";
 import MenuIcon from '@material-ui/icons/Menu';
 import IconButton from '@material-ui/core/IconButton';
-import Avatar from '@material-ui/core/avatar';
+import Avatar from '@material-ui/core/Avatar';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { authMiddleWare } from '../util/auth'
