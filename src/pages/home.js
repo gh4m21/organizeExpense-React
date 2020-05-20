@@ -166,7 +166,7 @@ const Home = (props) => {
             <Divider />
             <List className={classes.menuItem}>
                 <ListItem button key="Dashboard" onClick={loadDashboardPage}>
-                    <ListItemIcon>
+                    <ListItemIcon className={classes.menuItem}>
                         {' '}
                         <DashboardIcon />{' '}
                     </ListItemIcon>
@@ -174,7 +174,7 @@ const Home = (props) => {
                 </ListItem>
 
                 <ListItem button key="Expense" onClick={loadExpensePage}>
-                    <ListItemIcon>
+                    <ListItemIcon className={classes.menuItem}>
                         {' '}
                         <PaymentIcon />{' '}
                     </ListItemIcon>
@@ -182,7 +182,7 @@ const Home = (props) => {
                 </ListItem>
 
                 <ListItem button key="Income" onClick={loadIncomePage}>
-                    <ListItemIcon>
+                    <ListItemIcon className={classes.menuItem}>
                         {' '}
                         <AttachMoneyIcon /> {' '}
                     </ListItemIcon>
@@ -190,7 +190,7 @@ const Home = (props) => {
                 </ListItem>
 
                 <ListItem button key="Account" onClick={loadAccountPage}>
-                    <ListItemIcon>
+                    <ListItemIcon className={classes.menuItem}>
                         {' '}
                         <AccountCircleIcon />{' '}
                     </ListItemIcon>
@@ -198,7 +198,7 @@ const Home = (props) => {
                 </ListItem>
 
                 <ListItem button key="Logout" onClick={logoutHandler}>
-                    <ListItemIcon>
+                    <ListItemIcon className={classes.menuItem}>
                         {' '}
                         <ExitToAppIcon />{' '}
                     </ListItemIcon>

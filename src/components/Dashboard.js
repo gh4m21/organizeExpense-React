@@ -1,29 +1,24 @@
 import React, { Component } from 'react'
 
-import withStyles from '@material-ui/core/styles/withStyles';
 import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+import ViewTotal from './cards/ViewTotal'
 
-const styles = ((theme) => ({
+const useStyles = makeStyles((theme) => ({
     content: {
         flexGrow: 1,
         padding: theme.spacing(3),
     },
     toolbar: theme.mixins.toolbar,
-})
-);
+}));
 
-class Dashboard extends Component {
-    render() {
-        const { classes } = this.props;
-        return (
-            <main className={classes.content}>
-                <div className={classes.toolbar} />
-                <Typography paragraph>
-                    Hello I am Dashboard
-            </Typography>
-            </main>
-        )
-    }
+const Dashboard = props => {
+
+    const classes = useStyles();
+    return (
+        <ViewTotal />
+    )
 }
 
-export default (withStyles(styles)(Dashboard));
+
+export default (Dashboard);
