@@ -18,7 +18,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import DashboardIcon from '@material-ui/icons/Dashboard';
+import EqualizerIcon from '@material-ui/icons/Equalizer';
 import AttachMoneyIcon from "@material-ui/icons/AttachMoney";
 import PaymentIcon from "@material-ui/icons/Payment";
 import MenuIcon from '@material-ui/icons/Menu';
@@ -168,7 +168,7 @@ const Home = (props) => {
                 <ListItem button key="Dashboard" onClick={loadDashboardPage}>
                     <ListItemIcon className={classes.menuItem}>
                         {' '}
-                        <DashboardIcon />{' '}
+                        <EqualizerIcon />{' '}
                     </ListItemIcon>
                     <ListItemText primary="Dashboard" />
                 </ListItem>
