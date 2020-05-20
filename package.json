@@ -1,6 +1,6 @@
 {
   "name": "organizexpense",
-  "version": "0.1.0",
+  "version": "1.0",
   "author": "Yves Gervens Constant",
   "private": true,
   "dependencies": {
