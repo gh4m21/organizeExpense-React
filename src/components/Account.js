@@ -11,6 +11,32 @@ import clsx from 'clsx';
 import axios from 'axios';
 import { authMiddleWare } from '../util/auth';
 
+
+const CssTextField = withStyles({
+    root: {
+        '& label': {
+            color: '#43c2d5',
+        },
+        '& label.Mui-focused': {
+            color: '#137988',
+        },
+        '& .MuiInput-underline:after': {
+            borderBottomColor: '#137988',
+        },
+        '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+                borderColor: '#137988',
+            },
+            '&:hover fieldset': {
+                borderColor: 'yellow',
+            },
+            '&.Mui-focused fieldset': {
+                borderColor: '#137988',
+            },
+        },
+    },
+})(TextField);
+
 const styles = (theme) => ({
     content: {
         flexGrow: 1,
@@ -19,7 +45,10 @@ const styles = (theme) => ({
     toolbar: theme.mixins.toolbar,
     root: {},
     details: {
-        display: 'flex'
+        display: 'flex',
+    },
+    backgroundDetails: {
+        backgroundColor: "#015a68",
     },
     avatar: {
         height: 110,
@@ -28,7 +57,8 @@ const styles = (theme) => ({
         flexGrow: 0
     },
     locationText: {
-        paddingLeft: '15px'
+        paddingLeft: '15px',
+        color: '#ebe9d9'
     },
     buttonProperty: {
         position: 'absolute',
@@ -49,7 +79,9 @@ const styles = (theme) => ({
     },
     uploadButton: {
         marginLeft: '8px',
-        margin: theme.spacing(1)
+        margin: theme.spacing(1),
+        borderColor: '#b9f022',
+        color: '#b9f022',
     },
     customError: {
         color: 'red',
@@ -57,7 +89,24 @@ const styles = (theme) => ({
         marginTop: 10
     },
     submitButton: {
-        marginTop: '10px'
+        marginTop: '10px',
+        color: '#b9f021',
+        backgroundColor: '#114B5F',
+    },
+    appBar: {
+        zIndex: theme.zIndex.drawer + 1,
+        backgroundColor: '#114B5F',
+    },
+    link: {
+        color: '#b9f022'
+    },
+    inputColor: {
+        color: '#e1e1d7',
+        backgroundColor: '#114b5f',
+    },
+    inputDisable: {
+        color: '#bdbdb3',
+        backgroundColor: '#114b5f',
     }
 });
 
@@ -192,7 +241,7 @@ class Account extends Component {
                 <main className={classes.content}>
                     <div className={classes.toolbar} />
                     <Card {...rest} className={clsx(classes.root, classes)}>
-                        <CardContent>
+                        <CardContent className={classes.backgroundDetails}>
                             <div className={classes.details}>
                                 <div>
                                     <Typography className={classes.locationText} gutterBottom variant="h4">
@@ -209,7 +258,7 @@ class Account extends Component {
                                     >
                                         Upload Photo
 									</Button>
-                                    <input type="file" onChange={this.handleImageChange} />
+                                    <input type="file" onChange={this.handleImageChange} style={{ color: '#e1e1d7' }} />
 
                                     {this.state.imageError ? (
                                         <div className={classes.customError}>
@@ -223,33 +272,43 @@ class Account extends Component {
                             </div>
                             <div className={classes.progress} />
                         </CardContent>
-                        <Divider />
+
                     </Card>
 
                     <br />
                     <Card {...rest} className={clsx(classes.root, classes)}>
                         <form autoComplete="off" noValidate>
-                            <Divider />
-                            <CardContent>
+
+                            <CardContent className={classes.backgroundDetails}>
                                 <Grid container spacing={3}>
                                     <Grid item md={6} xs={12}>
-                                        <TextField
+                                        <CssTextField
                                             fullWidth
                                             label="First name"
                                             margin="dense"
                                             name="firstName"
                                             variant="outlined"
+                                            InputProps={{
+                                                classes: {
+                                                    input: classes.inputColor
+                                                }
+                                            }}
                                             value={this.state.firstName}
                                             onChange={this.handleChange}
                                         />
                                     </Grid>
                                     <Grid item md={6} xs={12}>
-                                        <TextField
+                                        <CssTextField
                                             fullWidth
                                             label="Last name"
                                             margin="dense"
                                             name="lastName"
                                             variant="outlined"
+                                            InputProps={{
+                                                classes: {
+                                                    input: classes.inputColor
+                                                }
+                                            }}
                                             value={this.state.lastName}
                                             onChange={this.handleChange}
                                         />
@@ -261,19 +320,29 @@ class Account extends Component {
                                             margin="dense"
                                             name="email"
                                             variant="outlined"
+                                            InputProps={{
+                                                classes: {
+                                                    input: classes.inputDisable
+                                                }
+                                            }}
                                             disabled={true}
                                             value={this.state.email}
                                             onChange={this.handleChange}
                                         />
                                     </Grid>
                                     <Grid item md={6} xs={12}>
-                                        <TextField
+                                        <CssTextField
                                             fullWidth
                                             label="Phone Number"
                                             margin="dense"
                                             name="phone"
                                             type="number"
                                             variant="outlined"
+                                            InputProps={{
+                                                classes: {
+                                                    input: classes.inputColor
+                                                }
+                                            }}
                                             disabled={false}
                                             value={this.state.phoneNumber}
                                             onChange={this.handleChange}
@@ -287,25 +356,34 @@ class Account extends Component {
                                             name="userHandle"
                                             disabled={true}
                                             variant="outlined"
+                                            InputProps={{
+                                                classes: {
+                                                    input: classes.inputDisable
+                                                }
+                                            }}
                                             value={this.state.username}
                                             onChange={this.handleChange}
                                         />
                                     </Grid>
                                     <Grid item md={6} xs={12}>
-                                        <TextField
+                                        <CssTextField
                                             fullWidth
                                             label="Country"
                                             margin="dense"
                                             name="country"
                                             variant="outlined"
+                                            InputProps={{
+                                                classes: {
+                                                    input: classes.inputColor
+                                                }
+                                            }}
                                             value={this.state.country}
                                             onChange={this.handleChange}
                                         />
                                     </Grid>
                                 </Grid>
                             </CardContent>
-                            <Divider />
-                            <CardActions />
+
                         </form>
                     </Card>
                     <Button

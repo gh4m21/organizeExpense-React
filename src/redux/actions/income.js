@@ -37,7 +37,7 @@ export const loadIncome = (history, incomes) => dispatch => {
                     type: INCOME_FETCH_FAIL,
                 });
                 if (error.response.status === 403) {
-                    history.push('/login')
+                    window.location.href = '/login';
                 }
                 console.log('error');
             });
@@ -58,7 +58,7 @@ export const loadIncome = (history, incomes) => dispatch => {
                 });
 
                 if (error.response.status === 403) {
-                    history.push('/login')
+                    window.location.href = '/login';
                 }
                 console.log('error');
             });

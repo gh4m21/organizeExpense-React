@@ -71,8 +71,11 @@ const styles = (theme) => ({
         position: 'absolute',
         color: 'yellow',
     },
-    title: {
+    brand: {
         color: '#FED766',
+    },
+    title: {
+        color: "#ebe9d9"
     },
     appBar: {
         zIndex: theme.zIndex.drawer + 1,
@@ -148,7 +151,7 @@ class login extends Component {
                 <CssBaseline />
                 <AppBar position="fixed" className={classes.appBar}>
                     <Toolbar>
-                        <Typography className={classes.title} variant="h6" noWrap>
+                        <Typography className={classes.brand} variant="h6" noWrap>
                             OrganizExpense
                                 </Typography>
                     </Toolbar>
@@ -158,7 +161,7 @@ class login extends Component {
                     <Avatar className={classes.avatar}>
                         <LockOutlinedIcon />
                     </Avatar>
-                    <Typography component="h1" variant="h5">
+                    <Typography component="h1" variant="h5" className={classes.title}>
                         Login
 					</Typography>
                     <form className={classes.form} noValidate>

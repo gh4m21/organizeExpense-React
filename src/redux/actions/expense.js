@@ -37,7 +37,7 @@ export const loadExpense = (history, expenses) => dispatch => {
                     type: EXPENSE_FETCH_FAIL,
                 });
                 if (error.response.status === 403) {
-                    history.push('/login')
+                    window.location.href = '/login';
                 }
                 console.log('error');
             });
@@ -58,7 +58,7 @@ export const loadExpense = (history, expenses) => dispatch => {
                 });
 
                 if (error.response.status === 403) {
-                    history.push('/login')
+                    window.location.href = '/login';
                 }
                 console.log('error');
             });
