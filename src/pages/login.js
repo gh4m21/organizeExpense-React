@@ -132,7 +132,7 @@ class login extends Component {
                 this.setState({
                     loading: false,
                 });
-                this.props.history.push('/');
+                window.location.href = '/';
             })
             .catch((error) => {
                 this.setState({

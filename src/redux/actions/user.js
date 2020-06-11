@@ -5,6 +5,7 @@ import {
 } from './Constants';
 import axios from 'axios';
 import { authMiddleWare } from '../../util/auth';
+import { Route, Redirect } from 'react-router-dom';
 
 
 export const getUser = (history) => dispatch => {

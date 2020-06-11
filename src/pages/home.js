@@ -148,7 +148,8 @@ const Home = (props) => {
 
     const logoutHandler = (event) => {
         localStorage.removeItem('AuthToken');
-        history.push('/login');
+        authMiddleWare(history);
+        //window.location.href = '/login';
     };
 
 
