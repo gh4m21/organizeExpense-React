@@ -8,6 +8,7 @@ import {
     ADD_INCOME_REQUEST,
     ADD_INCOME_FAIL,
     ADD_INCOME_SUCCESS,
+    API_BASE_URL
 } from './Constants';
 import axios from 'axios';
 import { authMiddleWare } from '../../util/auth';
@@ -25,7 +26,7 @@ export const loadIncome = (history, incomes) => dispatch => {
 
     if (incomes === '') { //load all expense
         axios
-            .get('/income')
+            .get(API_BASE_URL + '/income')
             .then((response) => {
                 dispatch({
                     type: INCOME_FETCH_SUCCESS,
@@ -44,7 +45,7 @@ export const loadIncome = (history, incomes) => dispatch => {
 
     } else { //load one income
         axios
-            .get(`/expense/${incomes.idIncome}`)
+            .get(API_BASE_URL + `/expense/${incomes.idIncome}`)
             .then((response) => {
                 dispatch({
                     type: INCOME_FETCH_SUCCESS,
@@ -85,7 +86,7 @@ export const editIncome = (history, incomes) => dispatch => {
 
     let options = {};
     options = {
-        url: `/income/${incomes.idIncome}`,
+        url: API_BASE_URL + `/income/${incomes.idIncome}`,
         method: 'put',
         data: userIncome
     }
@@ -119,7 +120,7 @@ export const addIncome = (history, incomesData) => dispatch => {
 
     let options = {};
     options = {
-        url: '/income',
+        url: API_BASE_URL + '/income',
         method: 'post',
         data: incomesData
     }

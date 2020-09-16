@@ -12,6 +12,8 @@ import axios from 'axios';
 import { authMiddleWare } from '../util/auth';
 
 
+const API_BASE_URL = 'https://us-central1-organizexpense.cloudfunctions.net/api';
+
 const CssTextField = withStyles({
     root: {
         '& label': {
@@ -133,7 +135,7 @@ class Account extends Component {
         const authToken = localStorage.getItem('AuthToken');
         axios.defaults.headers.common = { Authorization: `${authToken}` };
         axios
-            .get('/user')
+            .get(API_BASE_URL + '/user')
             .then((response) => {
                 console.log(response.data);
                 this.setState({
@@ -179,7 +181,7 @@ class Account extends Component {
         form_data.append('content', this.state.content);
         axios.defaults.headers.common = { Authorization: `${authToken}` };
         axios
-            .post('/user/image', form_data, {
+            .post(API_BASE_URL + '/user/image', form_data, {
                 headers: {
                     'content-type': 'multipart/form-data'
                 }
@@ -212,7 +214,7 @@ class Account extends Component {
             phoneNumber: this.state.phoneNumber
         };
         axios
-            .post('/user', formRequest)
+            .post(API_BASE_URL + '/user', formRequest)
             .then(() => {
                 this.setState({ buttonLoading: false });
             })

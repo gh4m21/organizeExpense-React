@@ -16,6 +16,8 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 import axios from 'axios';
 
+const API_BASE_URL = 'https://us-central1-organizexpense.cloudfunctions.net/api';
+
 const CssTextField = withStyles({
     root: {
         '& label': {
@@ -131,7 +133,7 @@ class signup extends Component {
         };
 
         axios
-            .post('/signup', newUserData)
+            .post(API_BASE_URL + '/signup', newUserData)
             .then((response) => {
                 localStorage.setItem('AuthToken', `${response.data.token}`);
                 this.setState({

@@ -2,6 +2,7 @@ import {
     USER_FETCH_REQUEST,
     USER_FETCH_SUCCESS,
     USER_FETCH_FAIL,
+    API_BASE_URL
 } from './Constants';
 import axios from 'axios';
 import { authMiddleWare } from '../../util/auth';
@@ -18,7 +19,7 @@ export const getUser = (history) => dispatch => {
     const authToken = localStorage.getItem('AuthToken');
     axios.defaults.headers.common = { Authorization: `${authToken}` };
     axios
-        .get('/user')
+        .get(API_BASE_URL + '/user')
         .then((response) => {
 
             dispatch({

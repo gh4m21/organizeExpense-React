@@ -1,7 +1,8 @@
 import {
     CURRENCY_FETCH_REQUEST,
     CURRENCY_FETCH_SUCCESS,
-    CURRENCY_FETCH_FAIL
+    CURRENCY_FETCH_FAIL,
+    API_BASE_URL
 } from '../actions/Constants';
 
 import axios from 'axios';
@@ -12,7 +13,7 @@ export const loadCurrency = () => dispatch => {
     });
 
     axios
-        .get('/currency')
+        .get(API_BASE_URL + '/currency')
         .then((response) => {
             dispatch({
                 type: CURRENCY_FETCH_SUCCESS,

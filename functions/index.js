@@ -1,6 +1,9 @@
 const functions = require('firebase-functions');
 const app = require('express')();
 const auth = require('./util/auth');
+const cors = require('cors');
+
+app.use(cors({ origin: true }));
 
 const { getAllExpenses, getOneExpense, addExpense, deleteExpense, editExpense } = require('./API/expenses');
 const { getAllIncomes, getOneIncome, addIncome, deleteIncome, editIncome } = require('./API/incomes');

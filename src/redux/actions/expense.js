@@ -8,6 +8,7 @@ import {
     ADD_EXPENSE_REQUEST,
     ADD_EXPENSE_FAIL,
     ADD_EXPENSE_SUCCESS,
+    API_BASE_URL
 } from '../actions/Constants';
 import axios from 'axios';
 import { authMiddleWare } from '../../util/auth';
@@ -25,7 +26,7 @@ export const loadExpense = (history, expenses) => dispatch => {
 
     if (expenses === '') { //load all expense
         axios
-            .get('/expense')
+            .get(API_BASE_URL + '/expense')
             .then((response) => {
                 dispatch({
                     type: EXPENSE_FETCH_SUCCESS,
@@ -44,7 +45,7 @@ export const loadExpense = (history, expenses) => dispatch => {
 
     } else { //load one expense
         axios
-            .get(`/expense/${expenses.idExpense}`)
+            .get(API_BASE_URL + `/expense/${expenses.idExpense}`)
             .then((response) => {
                 dispatch({
                     type: EXPENSE_FETCH_SUCCESS,
@@ -85,7 +86,7 @@ export const editExpense = (history, expenses) => dispatch => {
 
     let options = {};
     options = {
-        url: `/expense/${expenses.idExpense}`,
+        url: API_BASE_URL + `/expense/${expenses.idExpense}`,
         method: 'put',
         data: userExpense
     }
@@ -119,7 +120,7 @@ export const addExpense = (history, expensesData) => dispatch => {
 
     let options = {};
     options = {
-        url: '/expense',
+        url: API_BASE_URL + '/expense',
         method: 'post',
         data: expensesData
     }

@@ -1,3 +1,6 @@
+// API BASE URL
+export const API_BASE_URL = 'https://us-central1-organizexpense.cloudfunctions.net/api';
+
 //expenses
 export const EXPENSE_FETCH_REQUEST = 'EXPENSE_FECTCH_REQUEST';
 export const EXPENSE_FETCH_SUCCESS = 'EXPENSE_FECTCH_SUCCESS';
